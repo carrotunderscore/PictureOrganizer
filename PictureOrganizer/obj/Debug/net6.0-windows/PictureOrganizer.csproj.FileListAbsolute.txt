@@ -1,0 +1,17 @@
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\PictureOrganizer.exe
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\PictureOrganizer.deps.json
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\PictureOrganizer.runtimeconfig.json
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\PictureOrganizer.dll
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\PictureOrganizer.pdb
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.Form1.resources
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.csproj.GenerateResource.cache
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.AssemblyInfoInputs.cache
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.AssemblyInfo.cs
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.csproj.CoreCompileInputs.cache
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.dll
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\refint\PictureOrganizer.dll
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.pdb
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.genruntimeconfig.cache
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\ref\PictureOrganizer.dll
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.Properties.Resources.resources
