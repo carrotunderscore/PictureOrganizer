@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.IO;
 using System.Reflection.Emit;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -12,6 +15,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
 4. Copy all the files to folders organized in years / months 
 5. fix filename layout
+6. Make buttons change location when resizing window
  */
 
 namespace PictureOrganizer
@@ -22,6 +26,7 @@ namespace PictureOrganizer
 		private string[] imageFiles;
 		private int currentImageIndex = 0;
 		private string selectedOutputFolder;
+		private string selectedInputFolder;
 
 		public Form1()
 		{
@@ -29,7 +34,7 @@ namespace PictureOrganizer
 			this.Size = new System.Drawing.Size(2100, 1200);
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
-			skipRight.TabStop = false; // Replace button1 with the name of your button
+
 
 		}
 
@@ -168,41 +173,17 @@ namespace PictureOrganizer
 		{
 			if (inputFolderDialog.ShowDialog() == DialogResult.OK)
 			{
-				string selectedFolder = inputFolderDialog.SelectedPath;
+				selectedInputFolder = inputFolderDialog.SelectedPath;
 
 				string[] allowedExtensions = { ".bmp", ".jpg", ".jpeg", ".png", ".gif" };
-				imageFiles = Directory.GetFiles(selectedFolder)
+				imageFiles = Directory.GetFiles(selectedInputFolder)
 									   .Where(file => allowedExtensions.Any(ext => ext.Equals(Path.GetExtension(file), StringComparison.OrdinalIgnoreCase)))
 									   .ToArray();
 
-				try
-				{
-					DirectoryInfo directoryInfo = new DirectoryInfo(selectedFolder);
+				inputFolderLabel.Text = selectedInputFolder;
 
-					if (directoryInfo.Exists)
-					{
-						FileInfo[] files = directoryInfo.GetFiles();
 
-						foreach (FileInfo fileInfo in files)
-						{
-							Console.WriteLine($"File Name: {fileInfo.Name}");
-							Console.WriteLine($"Full Path: {fileInfo.FullName}");
-							Console.WriteLine($"Creation Time: {fileInfo.CreationTime}");
-							Console.WriteLine($"Last Access Time: {fileInfo.LastAccessTime}");
-							Console.WriteLine($"Last Write Time: {fileInfo.LastWriteTime}");
-							Console.WriteLine($"File Size: {fileInfo.Length} bytes");
-							Console.WriteLine();
-						}
-					}
-					else
-					{
-						Console.WriteLine("Folder does not exist.");
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine($"An error occurred: {ex.Message}");
-				}
+
 
 			}
 		}
@@ -213,9 +194,221 @@ namespace PictureOrganizer
 			{
 				selectedOutputFolder = inputFolderDialog.SelectedPath;
 
-				
+				outputFolderLabel.Text = selectedOutputFolder;
+
 
 			}
 		}
+
+		private void sortYear_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				if (!String.IsNullOrEmpty(selectedInputFolder))
+				{
+					DirectoryInfo directoryInfo = new DirectoryInfo(selectedInputFolder);
+					string folderPath = selectedOutputFolder;
+
+					HashSet<int> uniqueYears = new HashSet<int>();
+					List<FileYearInfo> fileYearList = new List<FileYearInfo>();
+
+					if (directoryInfo.Exists)
+					{
+						LoopFoldersAndFiles(directoryInfo, ref fileYearList, ref uniqueYears, false);
+
+						//Create directories by year
+						CreateDirectoriesByYear(folderPath, fileYearList);
+
+						foreach (FileYearInfo file in fileYearList)
+						{
+							var newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
+							File.Copy(file.FullFilename, newFileLocation, true);
+						}
+					}
+				}
+				else
+				{
+					MessageBox.Show("You need to set input folder");
+				}
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"An error occurred: {ex.Message}");
+				MessageBox.Show($"An error occurred: {ex.Message}");
+			}
+		}
+
+		private void sortMonth_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				if (!String.IsNullOrEmpty(selectedInputFolder))
+				{
+					DirectoryInfo directoryInfo = new DirectoryInfo(selectedInputFolder);
+					string folderPath = selectedOutputFolder;
+
+					HashSet<int> uniqueYears = new HashSet<int>();
+					List<FileYearInfo> fileYearList = new List<FileYearInfo>();
+					/*
+					 Skapa objetkt för år och månader
+					Skapa mappar på år och månader
+
+					 */
+					if (directoryInfo.Exists)
+					{
+						LoopFoldersAndFiles(directoryInfo, ref fileYearList, ref uniqueYears, true);
+
+						//Create directories by year
+						CreateDirectoriesByYearAndMonths(folderPath, fileYearList);
+
+						foreach (FileYearInfo file in fileYearList)
+						{
+							string month = file.YearMonth.Split("-")[1];
+							var newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + month + "\\" + file.Filename;
+
+							File.Copy(file.FullFilename, newFileLocation, true);
+						}
+					}
+				}
+				else
+				{
+					MessageBox.Show("You need to set input folder");
+				}
+
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"An error occurred: {ex.Message}");
+				MessageBox.Show($"An error occurred: {ex.Message}");
+			}
+		}
+
+		private void CreateDirectoriesByYear(string folderPath, List<FileYearInfo> fileYearList)
+		{
+			//Create directories by year
+			DirectoryInfo yearGroupDirectory = new DirectoryInfo(folderPath + "\\PictureOrganizer" + "\\Years");
+			if (!yearGroupDirectory.Exists)
+			{
+				Directory.CreateDirectory(folderPath + "\\PictureOrganizer" + "\\Years");
+			}
+
+			var uniqueYears = fileYearList.Select(info => info.Year).Distinct().ToList();
+			var uniqueMonths = fileYearList.Select(info => info.YearMonth).Distinct().ToList();
+
+			foreach (int years in uniqueYears)
+			{
+				string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + years.ToString();
+
+				DirectoryInfo yearDirectory = new DirectoryInfo(individualYearString);
+				if (!yearDirectory.Exists)
+				{
+					Directory.CreateDirectory(individualYearString);
+				}
+			}
+		}
+
+		private void CreateDirectoriesByYearAndMonths(string folderPath, List<FileYearInfo> fileYearList)
+		{
+			//Create directories by year
+			DirectoryInfo yearGroupDirectory = new DirectoryInfo(folderPath + "\\PictureOrganizer" + "\\Years");
+			if (!yearGroupDirectory.Exists)
+			{
+				Directory.CreateDirectory(folderPath + "\\PictureOrganizer" + "\\Years");
+			}
+
+			var uniqueMonths = fileYearList.Select(info => info.YearMonth).Distinct().ToList();
+
+			foreach (string years in uniqueMonths)
+			{
+				string[] yearsAndMonthsSplit = years.Split('-');
+
+				string year = yearsAndMonthsSplit[0];
+				string month = yearsAndMonthsSplit[1];
+
+				string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + year + "\\" + month;
+
+				DirectoryInfo yearDirectory = new DirectoryInfo(individualYearString);
+				if (!yearDirectory.Exists)
+				{
+					Directory.CreateDirectory(individualYearString);
+				}
+			}
+		}
+
+		private void LoopFoldersAndFiles(DirectoryInfo directoryInfo, ref List<FileYearInfo> fileYearList, ref HashSet<int> uniqueYears, bool sortByMonth)
+		{
+			FileInfo[] files = directoryInfo.GetFiles();
+
+			//Loopa igenom alla mappar i en mapp
+			string[] allFiles = Directory.GetFiles(selectedInputFolder, "*.*", SearchOption.AllDirectories);
+
+			
+
+			foreach (string filePath in allFiles)
+			{
+				FileInfo fileInfo = new FileInfo(filePath);
+
+				Console.WriteLine("File Name: " + fileInfo.Name);
+				Console.WriteLine("Full Path: " + fileInfo.FullName);
+
+				Console.WriteLine("Creation Time: " + fileInfo.CreationTime);
+				Console.WriteLine("Last Access Time: " + fileInfo.LastAccessTime);
+				Console.WriteLine("Last Write Time: " + fileInfo.LastWriteTime);
+
+				if (sortByMonth)
+				{
+					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.CreationTime.Year.ToString() + "-" + GetMonthName(fileInfo.CreationTime.Month), fileInfo.FullName, fileInfo.Name));
+				}
+				else
+				{
+					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.FullName, fileInfo.Name));
+				}
+				
+
+				uniqueYears.Add(fileInfo.CreationTime.Year);
+			}
+		}
+
+		static string GetMonthName(int monthNumber)
+		{
+			if (monthNumber < 1 || monthNumber > 12)
+			{
+				// Handle invalid month numbers (1-12 are valid)
+				throw new ArgumentOutOfRangeException(nameof(monthNumber), "Month number should be between 1 and 12.");
+			}
+
+			// Use CultureInfo to get the month names
+			CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+			DateTimeFormatInfo dateTimeFormat = cultureInfo.DateTimeFormat;
+
+			// Return the month name corresponding to the monthNumber
+			return dateTimeFormat.GetMonthName(monthNumber);
+		}
 	}
+
+	public class FileYearInfo
+	{
+		public int Year { get; set; }
+
+		public string YearMonth { get; set; }
+		public string FullFilename { get; set; }
+
+		public string Filename { get; set; }
+
+		public FileYearInfo(int year, string fullFilename, string filename)
+		{
+			Year = year;
+			FullFilename = fullFilename;
+			Filename = filename;
+		}
+		public FileYearInfo(int year, string yearMonth, string fullFilename, string filename)
+		{
+			Year = year;
+			FullFilename = fullFilename;
+			Filename = filename;
+			YearMonth = yearMonth;
+		}
+	}
+
 }
