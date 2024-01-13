@@ -11,9 +11,16 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
  TODO
 1. Fix the selection of buttons with the arrowkeys
 2. zoom in and out of the picture with the up and down arrows
-3. Add button and folder to loop through everything. Input folder and output folder --CURRENT----------------
 
-4. Copy all the files to folders organized in years / months 
+3. Add button and folder to loop through everything. Input folder and output folder -DONE
+4. Copy all the files to folders organized in years / months -DONE
+
+Show pictures in subfolders flag
+Copy / move flag
+configure which type of file to copy/move
+Open gui and select which folders to configure--------
+
+DESIGN CHANGES
 5. fix filename layout
 6. Make buttons change location when resizing window
  */
@@ -343,7 +350,7 @@ namespace PictureOrganizer
 			//Loopa igenom alla mappar i en mapp
 			string[] allFiles = Directory.GetFiles(selectedInputFolder, "*.*", SearchOption.AllDirectories);
 
-			
+
 
 			foreach (string filePath in allFiles)
 			{
@@ -364,7 +371,7 @@ namespace PictureOrganizer
 				{
 					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.FullName, fileInfo.Name));
 				}
-				
+
 
 				uniqueYears.Add(fileInfo.CreationTime.Year);
 			}
@@ -384,6 +391,17 @@ namespace PictureOrganizer
 
 			// Return the month name corresponding to the monthNumber
 			return dateTimeFormat.GetMonthName(monthNumber);
+		}
+
+		private void fileSelection_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("sad");
+
+			// Create an instance of the SecondForm
+			FileSelection fileSelection = new FileSelection();
+
+			// Show the SecondForm
+			fileSelection.Show();
 		}
 	}
 

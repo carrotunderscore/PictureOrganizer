@@ -43,11 +43,10 @@
 			outputFolderLabel=new Label();
 			sortYear=new Button();
 			sortMonth=new Button();
-			label1=new Label();
+			fileSelection=new Button();
 			folderBrowserDialog1=new FolderBrowserDialog();
 			inputFolderDialog=new FolderBrowserDialog();
 			outputFolderDialog=new FolderBrowserDialog();
-			flowLayoutPanel2=new FlowLayoutPanel();
 			pictureBox1=new PictureBox();
 			tableLayoutPanel1=new TableLayoutPanel();
 			flowLayoutPanel1.SuspendLayout();
@@ -75,6 +74,7 @@
 			// 
 			// flowLayoutPanel1
 			// 
+			flowLayoutPanel1.AutoSizeMode=AutoSizeMode.GrowAndShrink;
 			flowLayoutPanel1.Controls.Add(openFolder);
 			flowLayoutPanel1.Controls.Add(skipLeft);
 			flowLayoutPanel1.Controls.Add(skipRight);
@@ -89,10 +89,11 @@
 			flowLayoutPanel1.Controls.Add(outputFolderLabel);
 			flowLayoutPanel1.Controls.Add(sortYear);
 			flowLayoutPanel1.Controls.Add(sortMonth);
-			flowLayoutPanel1.Controls.Add(label1);
-			flowLayoutPanel1.Location=new Point(15, 569);
+			flowLayoutPanel1.Controls.Add(fileSelection);
+			flowLayoutPanel1.Dock=DockStyle.Bottom;
+			flowLayoutPanel1.Location=new Point(0, 830);
 			flowLayoutPanel1.Name="flowLayoutPanel1";
-			flowLayoutPanel1.Size=new Size(1736, 193);
+			flowLayoutPanel1.Size=new Size(1763, 292);
 			flowLayoutPanel1.TabIndex=4;
 			// 
 			// skipLeft
@@ -155,15 +156,15 @@
 			label2.AutoSize=true;
 			label2.Location=new Point(142, 40);
 			label2.Name="label2";
-			label2.Size=new Size(198, 25);
+			label2.Size=new Size(246, 25);
 			label2.TabIndex=13;
-			label2.Text="Folder you want to sort";
+			label2.Text="FOLDER YOU WANT TO SORT";
 			// 
 			// inputFolderLabel
 			// 
 			inputFolderLabel.AutoSize=true;
 			flowLayoutPanel1.SetFlowBreak(inputFolderLabel, true);
-			inputFolderLabel.Location=new Point(346, 40);
+			inputFolderLabel.Location=new Point(394, 40);
 			inputFolderLabel.Name="inputFolderLabel";
 			inputFolderLabel.Size=new Size(174, 25);
 			inputFolderLabel.TabIndex=10;
@@ -185,15 +186,15 @@
 			label3.AutoSize=true;
 			label3.Location=new Point(142, 80);
 			label3.Name="label3";
-			label3.Size=new Size(346, 25);
+			label3.Size=new Size(424, 25);
 			label3.TabIndex=14;
-			label3.Text="Folder where you want to save sorted files";
+			label3.Text="FOLDER WHERE YOU WANT TO SAVE SORTED FILES";
 			// 
 			// outputFolderLabel
 			// 
 			outputFolderLabel.AutoSize=true;
 			flowLayoutPanel1.SetFlowBreak(outputFolderLabel, true);
-			outputFolderLabel.Location=new Point(494, 80);
+			outputFolderLabel.Location=new Point(572, 80);
 			outputFolderLabel.Name="outputFolderLabel";
 			outputFolderLabel.Size=new Size(189, 25);
 			outputFolderLabel.TabIndex=11;
@@ -212,6 +213,7 @@
 			// 
 			// sortMonth
 			// 
+			flowLayoutPanel1.SetFlowBreak(sortMonth, true);
 			sortMonth.Location=new Point(142, 123);
 			sortMonth.Name="sortMonth";
 			sortMonth.Size=new Size(143, 34);
@@ -221,19 +223,16 @@
 			sortMonth.UseVisualStyleBackColor=true;
 			sortMonth.Click+=sortMonth_Click;
 			// 
-			// label1
+			// fileSelection
 			// 
-			label1.Location=new Point(291, 120);
-			label1.Name="label1";
-			label1.Size=new Size(100, 23);
-			label1.TabIndex=9;
-			// 
-			// flowLayoutPanel2
-			// 
-			flowLayoutPanel2.Location=new Point(18, 566);
-			flowLayoutPanel2.Name="flowLayoutPanel2";
-			flowLayoutPanel2.Size=new Size(743, 114);
-			flowLayoutPanel2.TabIndex=5;
+			fileSelection.Location=new Point(3, 163);
+			fileSelection.Name="fileSelection";
+			fileSelection.Size=new Size(143, 34);
+			fileSelection.TabIndex=16;
+			fileSelection.TabStop=false;
+			fileSelection.Text="File types";
+			fileSelection.UseVisualStyleBackColor=true;
+			fileSelection.Click+=fileSelection_Click;
 			// 
 			// pictureBox1
 			// 
@@ -242,33 +241,33 @@
 			pictureBox1.Location=new Point(3, 3);
 			pictureBox1.Name="pictureBox1";
 			tableLayoutPanel1.SetRowSpan(pictureBox1, 2);
-			pictureBox1.Size=new Size(1757, 545);
+			pictureBox1.Size=new Size(1757, 824);
 			pictureBox1.TabIndex=1;
 			pictureBox1.TabStop=false;
 			// 
 			// tableLayoutPanel1
 			// 
+			tableLayoutPanel1.AutoSizeMode=AutoSizeMode.GrowAndShrink;
 			tableLayoutPanel1.ColumnCount=1;
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
 			tableLayoutPanel1.Controls.Add(pictureBox1, 0, 0);
-			tableLayoutPanel1.Dock=DockStyle.Top;
+			tableLayoutPanel1.Dock=DockStyle.Fill;
 			tableLayoutPanel1.Location=new Point(0, 0);
 			tableLayoutPanel1.Name="tableLayoutPanel1";
 			tableLayoutPanel1.RowCount=2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size=new Size(1763, 551);
+			tableLayoutPanel1.Size=new Size(1763, 830);
 			tableLayoutPanel1.TabIndex=0;
 			// 
 			// Form1
 			// 
 			AutoScaleDimensions=new SizeF(10F, 25F);
 			AutoScaleMode=AutoScaleMode.Font;
-			ClientSize=new Size(1763, 774);
+			ClientSize=new Size(1763, 1122);
 			Controls.Add(tableLayoutPanel1);
 			Controls.Add(flowLayoutPanel1);
-			Controls.Add(flowLayoutPanel2);
 			Name="Form1";
 			Text="Picture Organizer";
 			flowLayoutPanel1.ResumeLayout(false);
@@ -291,15 +290,14 @@
 		private Button outputFolder;
 		private FolderBrowserDialog inputFolderDialog;
 		private FolderBrowserDialog outputFolderDialog;
-		private FlowLayoutPanel flowLayoutPanel2;
 		private PictureBox pictureBox1;
 		private TableLayoutPanel tableLayoutPanel1;
-		private Label label1;
 		private Label inputFolderLabel;
 		private Label outputFolderLabel;
 		private Button sortYear;
 		private Label label2;
 		private Label label3;
 		private Button sortMonth;
+		private Button fileSelection;
 	}
 }
