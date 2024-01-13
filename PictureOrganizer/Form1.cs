@@ -23,17 +23,18 @@ Open gui and select which folders to configure--------
 DESIGN CHANGES
 5. fix filename layout
 6. Make buttons change location when resizing window
+7. fixa checkboxes
  */
 
 namespace PictureOrganizer
 {
 	public partial class Form1 : Form
 	{
-
 		private string[] imageFiles;
 		private int currentImageIndex = 0;
 		private string selectedOutputFolder;
 		private string selectedInputFolder;
+		private Dictionary<string, bool> fileTypeCheckboxes;
 
 		public Form1()
 		{
@@ -43,6 +44,85 @@ namespace PictureOrganizer
 			KeyDown += Form_KeyDown;
 
 
+			fileTypeCheckboxes = new Dictionary<string, bool>
+			{
+				// Text Files
+				{ "Text files:", false },
+				{ ".txt", false },
+				{ ".csv", false },
+
+				// Document Files
+				{ ".doc", false },
+				{ ".docx", false },
+				{ ".pdf", false },
+
+				// Spreadsheet Files
+				{ ".xls", false },
+				{ ".xlsx", false },
+
+				// Presentation Files
+				{ ".ppt", false },
+				{ ".pptx", false },
+
+				// Image Files
+				{ "Image Files:", false },
+				{ ".jpg", true },
+				{ ".jpeg", true },
+				{ ".png", true },
+				{ ".gif", true },
+				{ ".bmp", true },
+
+				// Audio Files
+				{ ".mp3", false },
+				{ ".wav", false },
+				{ ".ogg", false },
+
+				// Video Files
+				{ ".mp4", false },
+				{ ".avi", false },
+				{ ".mkv", false },
+				{ ".mov", false },
+
+				// Archive Files
+				{ ".zip", false },
+				{ ".rar", false },
+
+				// Programming Files
+				{ ".c", false },
+				{ ".cpp", false },
+				{ ".java", false },
+				{ ".py", false },
+
+				// Database Files
+				{ ".db", false },
+				{ ".sqlite", false },
+				{ ".mdb", false },
+				{ ".accdb", false },
+
+				// Web Files
+				{ ".html", false },
+				{ ".htm", false },
+				{ ".css", false },
+				{ ".js", false },
+
+				// Executable Files
+				{ ".exe", false },
+				{ ".dll", false },
+				{ ".app", false },
+
+				// Configuration Files
+				{ ".ini", false },
+				{ ".json", false },
+
+				// Font Files
+				{ ".ttf", false },
+				{ ".otf", false },
+
+				// 3D Model Files
+				{ ".obj", false },
+				{ ".stl", false },
+			};
+
 		}
 
 		private void openFolder_Click(object sender, EventArgs e)
@@ -51,7 +131,12 @@ namespace PictureOrganizer
 			{
 				string selectedFolder = folderBrowserDialog1.SelectedPath;
 
-				string[] allowedExtensions = { ".bmp", ".jpg", ".jpeg", ".png", ".gif" };
+				string[] allowedExtensions = fileTypeCheckboxes
+				.Where(pair => pair.Value)
+				.Select(pair => pair.Key)
+				.Where(extension => extension.StartsWith("."))
+				.ToArray();
+
 				imageFiles = Directory.GetFiles(selectedFolder)
 									   .Where(file => allowedExtensions.Any(ext => ext.Equals(Path.GetExtension(file), StringComparison.OrdinalIgnoreCase)))
 									   .ToArray();
@@ -395,13 +480,16 @@ namespace PictureOrganizer
 
 		private void fileSelection_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("sad");
+			using (FileSelection fileSelection = new FileSelection(fileTypeCheckboxes))
+			{
+				DialogResult result = fileSelection.ShowDialog();
 
-			// Create an instance of the SecondForm
-			FileSelection fileSelection = new FileSelection();
-
-			// Show the SecondForm
-			fileSelection.Show();
+				if (result == DialogResult.OK)
+				{
+					fileTypeCheckboxes = fileSelection.GetCheckedBoxes();
+					var hej = "";
+				}
+			}
 		}
 	}
 
