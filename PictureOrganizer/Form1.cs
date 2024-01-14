@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection.Emit;
@@ -9,21 +10,30 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolBar;
 
 /*
  TODO
-1. Fix the selection of buttons with the arrowkeys
-2. zoom in and out of the picture with the up and down arrows
+1. Fix the selection of buttons with the arrowkeys -small
+2. zoom in and out of the picture with the up and down arrows -small
 
-3. Add button and folder to loop through everything. Input folder and output folder -DONE
-4. Copy all the files to folders organized in years / months -DONE
+Show pictures in subfolders flag -small
+Copy / move flag -small
+Open gui and select which folders to configure -big
+Save old file location -big
+Organize code - medium
+add window telling you how much space the file take up when copying - small
 
-Show pictures in subfolders flag
-Copy / move flag
-configure which type of file to copy/move
-Open gui and select which folders to configure--------
+
 
 DESIGN CHANGES
-5. fix filename layout
-6. Make buttons change location when resizing window
+5. fix filename layout -medium
+6. Make buttons change location when resizing window -small
+
+
+
+DONE__________________
+3. Add button and folder to loop through everything. Input folder and output folder -DONE
+4. Copy all the files to folders organized in years / months -DONE
 7. fixa checkboxes
+configure which type of file to copy/move -DONE
+Add progressbar -medium - DONE -was small
  */
 
 namespace PictureOrganizer
@@ -311,11 +321,29 @@ namespace PictureOrganizer
 						//Create directories by year
 						CreateDirectoriesByYear(folderPath, fileYearList);
 
+						ProgressBar progressBar = new ProgressBar(fileYearList, folderPath);
+						progressBar.Show();
+
+						int index = 0;
+
+						/*
 						foreach (FileYearInfo file in fileYearList)
 						{
-							var newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
-							File.Copy(file.FullFilename, newFileLocation, true);
+							if (File.Exists(file.FullFilename))
+							{
+								using (FileStream fs = File.Open(file.FullFilename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+								{
+									var newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
+
+									progressBar.updateProgressBar(index);
+
+									File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
+									//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
+									index++;
+								}
+							}
 						}
+						*/
 					}
 				}
 				else
@@ -329,6 +357,7 @@ namespace PictureOrganizer
 				Console.WriteLine($"An error occurred: {ex.Message}");
 				MessageBox.Show($"An error occurred: {ex.Message}");
 			}
+			
 		}
 
 		private void sortMonth_Click(object sender, EventArgs e)
@@ -342,11 +371,7 @@ namespace PictureOrganizer
 
 					HashSet<int> uniqueYears = new HashSet<int>();
 					List<FileYearInfo> fileYearList = new List<FileYearInfo>();
-					/*
-					 Skapa objetkt för år och månader
-					Skapa mappar på år och månader
-
-					 */
+					
 					if (directoryInfo.Exists)
 					{
 						LoopFoldersAndFiles(directoryInfo, ref fileYearList, ref uniqueYears, true);
@@ -430,23 +455,24 @@ namespace PictureOrganizer
 
 		private void LoopFoldersAndFiles(DirectoryInfo directoryInfo, ref List<FileYearInfo> fileYearList, ref HashSet<int> uniqueYears, bool sortByMonth)
 		{
+
 			FileInfo[] files = directoryInfo.GetFiles();
-
 			//Loopa igenom alla mappar i en mapp
-			string[] allFiles = Directory.GetFiles(selectedInputFolder, "*.*", SearchOption.AllDirectories);
-
-
+			List<string> allFiles = new List<string>();
+			EnumerateFolders(directoryInfo.FullName, allFiles);
+			List<double> allFilesSizeMB = new List<double>();
 
 			foreach (string filePath in allFiles)
 			{
 				FileInfo fileInfo = new FileInfo(filePath);
+				// Get the size of the file in bytes	
+				long fileSizeInBytes = fileInfo.Length;
+				// Convert bytes to kilobytes
+				double fileSizeInKb = fileSizeInBytes / 1024.0;
+				// Convert bytes to megabytes
+				double fileSizeInMb = fileSizeInKb / 1024.0;
 
-				Console.WriteLine("File Name: " + fileInfo.Name);
-				Console.WriteLine("Full Path: " + fileInfo.FullName);
-
-				Console.WriteLine("Creation Time: " + fileInfo.CreationTime);
-				Console.WriteLine("Last Access Time: " + fileInfo.LastAccessTime);
-				Console.WriteLine("Last Write Time: " + fileInfo.LastWriteTime);
+				allFilesSizeMB.Add(fileSizeInMb);
 
 				if (sortByMonth)
 				{
@@ -456,9 +482,38 @@ namespace PictureOrganizer
 				{
 					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.FullName, fileInfo.Name));
 				}
-
-
 				uniqueYears.Add(fileInfo.CreationTime.Year);
+			}
+			double sumMB = allFilesSizeMB.Sum();
+			double sumGB = sumMB / 1024.0;
+			double roundedValue = Math.Round(sumGB, 2);
+			//MessageBox.Show("The files of all these files are " + sumMB.ToString() + " MB\n or " + roundedValue.ToString() + " GB");
+		}
+
+		static void EnumerateFolders(string folderPath, List<string> allFiles)
+		{
+			try
+			{
+				foreach (string directory in Directory.EnumerateDirectories(folderPath))
+				{
+					try
+					{
+						DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+						if ((directoryInfo.Attributes & (FileAttributes.Hidden | FileAttributes.System)) == 0)
+						{
+							allFiles.AddRange(Directory.GetFiles(directory, "*.*"));
+
+							EnumerateFolders(directory, allFiles);
+						}
+					}
+					catch (UnauthorizedAccessException ex)
+					{
+					}
+				}
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				Console.WriteLine($"Access denied: {ex.Message}");
 			}
 		}
 

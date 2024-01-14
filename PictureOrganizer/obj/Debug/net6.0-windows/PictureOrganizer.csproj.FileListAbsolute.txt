@@ -16,3 +16,4 @@ C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-w
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.Properties.Resources.resources
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.Form1.resources
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.FileSelection.resources
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.ProgressBar.resources
