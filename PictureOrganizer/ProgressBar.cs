@@ -19,8 +19,9 @@ namespace PictureOrganizer
 		private static Stopwatch stopwatch = new Stopwatch();
 		private List<FileYearInfo> fileYearList;
 		private string folderPath;
+		private bool sortByMonth;
 
-		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath)
+		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth)
 		{
 			InitializeComponent();
 			this.totalFiles=fileYearList.Count(); ;
@@ -28,6 +29,7 @@ namespace PictureOrganizer
 			this.fileProcessingProgressBar.Maximum = totalFiles;
 			this.fileYearList = fileYearList;
 			this.folderPath = folderPath;
+			this.sortByMonth = sortByMonth;
 			stopwatch.Start();
 
 			backgroundWorker1.DoWork += backgroundWorker1_DoWork;
@@ -59,11 +61,17 @@ namespace PictureOrganizer
 				{
 					using (FileStream fs = File.Open(file.FullFilename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
 					{
-						var newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
-
+						var newFileLocation = "";
+						if (!sortByMonth)
+						{
+							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
+						}
+						else
+						{
+							string month = file.YearMonth.Split("-")[1];
+							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + month + "\\" + file.Filename;
+						}
 						worker.ReportProgress(index);
-
-
 						File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
 						//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
 						index++;
