@@ -14,13 +14,15 @@ namespace PictureOrganizer
 	{
 		private string selectedInputFolder;
 		private string selectedOutputFolder;
+		private static bool LoopSubFolders;
 		private static Dictionary<string, bool> FileTypeCheckboxes;
 
-		public FileProcessing(string selectedInputFolder, string selectedOutputFolder, Dictionary<string, bool> fileTypeCheckboxes)
+		public FileProcessing(string selectedInputFolder, string selectedOutputFolder, Dictionary<string, bool> fileTypeCheckboxes, bool loopSubFolders)
 		{
 			this.selectedInputFolder=selectedInputFolder;
 			this.selectedOutputFolder=selectedOutputFolder;
 			FileTypeCheckboxes = fileTypeCheckboxes;
+			LoopSubFolders = loopSubFolders;
 		}
 
 		public void sortFiles(bool sortByMonth)
@@ -149,31 +151,49 @@ namespace PictureOrganizer
 			string[] allowedExtensions = getAllowedFileExtensions(FileTypeCheckboxes);
 			try
 			{
-				foreach (string directory in Directory.EnumerateDirectories(folderPath))
-				{
-					try
-					{
-						DirectoryInfo directoryInfo = new DirectoryInfo(directory);
-						if ((directoryInfo.Attributes & (FileAttributes.Hidden | FileAttributes.System)) == 0)
-						{
-
-							string[] files = Directory.GetFiles(directory, "*.*")
-							.Where(file => allowedExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
-							.ToArray();
-							allFiles.AddRange(files);
-
-							EnumerateFolders(directory, allFiles);
-						}
-					}
-					catch (UnauthorizedAccessException ex)
-					{
-					}
-				}
+				string[] filesInFolder = Directory.GetFiles(folderPath, "*.*")
+					.Where(file => allowedExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+					.ToArray();
+				allFiles.AddRange(filesInFolder);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
 				Console.WriteLine($"Access denied: {ex.Message}");
 			}
+
+
+			if(LoopSubFolders)
+			{
+				try
+				{
+					var hej = Directory.EnumerateDirectories(folderPath);
+					foreach (string directory in Directory.EnumerateDirectories(folderPath))
+					{
+						try
+						{
+							DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+							if ((directoryInfo.Attributes & (FileAttributes.Hidden | FileAttributes.System)) == 0)
+							{
+
+								string[] files = Directory.GetFiles(directory, "*.*")
+								.Where(file => allowedExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)))
+								.ToArray();
+								allFiles.AddRange(files);
+
+								EnumerateFolders(directory, allFiles);
+							}
+						}
+						catch (UnauthorizedAccessException ex)
+						{
+						}
+					}
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					Console.WriteLine($"Access denied: {ex.Message}");
+				}
+			}
+			
 		}
 	}
 }

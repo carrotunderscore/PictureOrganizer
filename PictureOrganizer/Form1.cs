@@ -18,9 +18,10 @@ using static PictureOrganizer.Helper;
 
 Show pictures in subfolders flag -small
 Copy / move flag -small
+
+
 Open gui and select which folders to configure -big
 Save old file location -big
-add window telling you how much space the file take up when copying - small--------------------------------------
 file history -big
 
 
@@ -38,6 +39,8 @@ DONE__________________
 configure which type of file to copy/move -DONE
 Add progressbar -medium - DONE -was small
 Organize code - medium - was medium
+add window telling you how much space the file take up when copying - small - was small
+
 
  */
 
@@ -51,6 +54,7 @@ namespace PictureOrganizer
 		private string selectedInputFolder;
 		private static Dictionary<string, bool> fileTypeCheckboxes;
 		private FileProcessing fileProcessing;
+		private bool loopSubFolders = false;
 
 		public Form1()
 		{
@@ -58,7 +62,6 @@ namespace PictureOrganizer
 			this.Size = new System.Drawing.Size(2100, 1200);
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
-
 
 			fileTypeCheckboxes = new Dictionary<string, bool>
 			{
@@ -138,8 +141,6 @@ namespace PictureOrganizer
 				{ ".obj", false },
 				{ ".stl", false },
 			};
-
-
 		}
 
 		//EVENT HANDLERS
@@ -286,12 +287,12 @@ namespace PictureOrganizer
 		}
 		private void sortYear_Click(object sender, EventArgs e)
 		{
-			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes);
+			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders);
 			fileProcessing.sortFiles(false);
 		}
 		private void sortMonth_Click(object sender, EventArgs e)
 		{
-			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes);
+			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders);
 			fileProcessing.sortFiles(true);
 		}
 		private void fileSelection_Click(object sender, EventArgs e)
@@ -308,6 +309,17 @@ namespace PictureOrganizer
 			}
 		}
 
+		private void loopSubFolders_CheckedChanged(object sender, EventArgs e)
+		{
+			if (loopSubFoldersCheckbox.Checked == true)
+			{
+				loopSubFolders = true;
+			}
+			else
+			{
+				loopSubFolders = false;
+			}
+		}
 
 
 		//FILEPROCESSING
@@ -330,6 +342,7 @@ namespace PictureOrganizer
 
 			}
 		}
+
 		
 	}
 

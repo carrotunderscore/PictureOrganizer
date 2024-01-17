@@ -44,6 +44,7 @@
 			sortYear=new Button();
 			sortMonth=new Button();
 			fileSelection=new Button();
+			loopSubFoldersCheckbox=new CheckBox();
 			folderBrowserDialog1=new FolderBrowserDialog();
 			inputFolderDialog=new FolderBrowserDialog();
 			outputFolderDialog=new FolderBrowserDialog();
@@ -90,6 +91,7 @@
 			flowLayoutPanel1.Controls.Add(sortYear);
 			flowLayoutPanel1.Controls.Add(sortMonth);
 			flowLayoutPanel1.Controls.Add(fileSelection);
+			flowLayoutPanel1.Controls.Add(loopSubFoldersCheckbox);
 			flowLayoutPanel1.Dock=DockStyle.Bottom;
 			flowLayoutPanel1.Location=new Point(0, 830);
 			flowLayoutPanel1.Name="flowLayoutPanel1";
@@ -225,6 +227,7 @@
 			// 
 			// fileSelection
 			// 
+			flowLayoutPanel1.SetFlowBreak(fileSelection, true);
 			fileSelection.Location=new Point(3, 163);
 			fileSelection.Name="fileSelection";
 			fileSelection.Size=new Size(143, 34);
@@ -233,6 +236,17 @@
 			fileSelection.Text="File types";
 			fileSelection.UseVisualStyleBackColor=true;
 			fileSelection.Click+=fileSelection_Click;
+			// 
+			// loopSubFolders
+			// 
+			loopSubFoldersCheckbox.AutoSize=true;
+			loopSubFoldersCheckbox.Location=new Point(3, 203);
+			loopSubFoldersCheckbox.Name="loopSubFolders";
+			loopSubFoldersCheckbox.Size=new Size(219, 29);
+			loopSubFoldersCheckbox.TabIndex=17;
+			loopSubFoldersCheckbox.Text="Go through subfolders";
+			loopSubFoldersCheckbox.UseVisualStyleBackColor=true;
+			loopSubFoldersCheckbox.CheckedChanged+=loopSubFolders_CheckedChanged;
 			// 
 			// pictureBox1
 			// 
@@ -299,5 +313,6 @@
 		private Label label3;
 		private Button sortMonth;
 		private Button fileSelection;
+		private CheckBox loopSubFoldersCheckbox;
 	}
 }
