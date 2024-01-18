@@ -237,11 +237,11 @@
 			fileSelection.UseVisualStyleBackColor=true;
 			fileSelection.Click+=fileSelection_Click;
 			// 
-			// loopSubFolders
+			// loopSubFoldersCheckbox
 			// 
 			loopSubFoldersCheckbox.AutoSize=true;
 			loopSubFoldersCheckbox.Location=new Point(3, 203);
-			loopSubFoldersCheckbox.Name="loopSubFolders";
+			loopSubFoldersCheckbox.Name="loopSubFoldersCheckbox";
 			loopSubFoldersCheckbox.Size=new Size(219, 29);
 			loopSubFoldersCheckbox.TabIndex=17;
 			loopSubFoldersCheckbox.Text="Go through subfolders";
@@ -279,6 +279,7 @@
 			// 
 			AutoScaleDimensions=new SizeF(10F, 25F);
 			AutoScaleMode=AutoScaleMode.Font;
+			BackColor=SystemColors.WindowFrame;
 			ClientSize=new Size(1763, 1122);
 			Controls.Add(tableLayoutPanel1);
 			Controls.Add(flowLayoutPanel1);

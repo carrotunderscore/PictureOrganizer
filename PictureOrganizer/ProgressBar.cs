@@ -20,6 +20,7 @@ namespace PictureOrganizer
 		private List<FileYearInfo> fileYearList;
 		private string folderPath;
 		private bool sortByMonth;
+		private int progressBarIndex = 0;
 
 		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth)
 		{
@@ -35,6 +36,8 @@ namespace PictureOrganizer
 			backgroundWorker1.DoWork += backgroundWorker1_DoWork;
 			backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
 			backgroundWorker1.WorkerReportsProgress = true;
+			backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
+
 
 			// Start the background worker
 			backgroundWorker1.RunWorkerAsync();
@@ -75,6 +78,7 @@ namespace PictureOrganizer
 						File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
 						//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
 						index++;
+						progressBarIndex = index;
 					}
 				}
 			}
@@ -83,6 +87,11 @@ namespace PictureOrganizer
 		{
 			fileProcessingProgressBar.Value = e.ProgressPercentage;
 			
+		}
+		private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			fileProcessingProgressBar.Value = progressBarIndex;
+			this.Close();
 		}
 	}
 }

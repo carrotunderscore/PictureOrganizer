@@ -23,6 +23,7 @@ namespace PictureOrganizer
 			this.selectedOutputFolder=selectedOutputFolder;
 			FileTypeCheckboxes = fileTypeCheckboxes;
 			LoopSubFolders = loopSubFolders;
+
 		}
 
 		public void sortFiles(bool sortByMonth)
@@ -46,8 +47,7 @@ namespace PictureOrganizer
 							CreateDirectories(folderPath, fileYearList, sortByMonth);
 							ProgressBar progressBar = new ProgressBar(fileYearList, folderPath, sortByMonth);
 							progressBar.Show();
-						}
-						
+						}	
 					}
 				}
 				else

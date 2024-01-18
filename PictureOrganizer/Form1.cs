@@ -16,21 +16,36 @@ using static PictureOrganizer.Helper;
 1. Fix the selection of buttons with the arrowkeys -small
 2. zoom in and out of the picture with the up and down arrows -small
 
-Show pictures in subfolders flag -small
 Copy / move flag -small
-
 
 Open gui and select which folders to configure -big
 Save old file location -big
-file history -big
+_____________________________________________________________________________________________________
+																									|
+file history. Save files previous history so that you can move them and then reverse it if you want. big--------------------------------------------------
+	0. Determine data to be saved
+		string[] FileOldLocation, string[] FileNewLocation, bool OperationType, DateTime ProcessedTime
+	1. Create json log file  
+		Save log file in appdata folder
 
+check if logfile exists (in appdata)
+create if not (in appdata)
+do this when starting the program
 
+Write to log file when:
+copying files
+Moving file (not yet developed)
+Renaming files
+																									|
+-----------------------------------------------------------------------------------------------------
+	
+TODO:::::::::::
+FileYearInfo object needs refactoring. Add new and old file location. Having a timestamp for the files if probably better that one year variable and one year month variable
+TODO:::::::::::
 
 DESIGN CHANGES
 5. fix filename layout -medium
 6. Make buttons change location when resizing window -small
-
-
 
 DONE__________________
 3. Add button and folder to loop through everything. Input folder and output folder -DONE
@@ -40,8 +55,7 @@ configure which type of file to copy/move -DONE
 Add progressbar -medium - DONE -was small
 Organize code - medium - was medium
 add window telling you how much space the file take up when copying - small - was small
-
-
+loop pictures in subfolders flag -small
  */
 
 namespace PictureOrganizer
@@ -141,6 +155,7 @@ namespace PictureOrganizer
 				{ ".obj", false },
 				{ ".stl", false },
 			};
+			Logging.CreateLogFile();
 		}
 
 		//EVENT HANDLERS
@@ -308,7 +323,6 @@ namespace PictureOrganizer
 				}
 			}
 		}
-
 		private void loopSubFolders_CheckedChanged(object sender, EventArgs e)
 		{
 			if (loopSubFoldersCheckbox.Checked == true)
@@ -320,7 +334,6 @@ namespace PictureOrganizer
 				loopSubFolders = false;
 			}
 		}
-
 
 		//FILEPROCESSING
 		private void LoadImage(int index)
@@ -343,7 +356,7 @@ namespace PictureOrganizer
 			}
 		}
 
-		
+
 	}
 
 
