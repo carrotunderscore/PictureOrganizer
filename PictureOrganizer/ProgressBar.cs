@@ -65,15 +65,18 @@ namespace PictureOrganizer
 							var newFileLocation = "";
 							if (!sortByMonth)
 							{
-								newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.FileCreationDate.Year.ToString() + "\\" + file.Filename;
+								newFileLocation = Path.Combine(folderPath, "PictureOrganizer", "Years", file.FileCreationDate.Year.ToString(), file.Filename);
 							}
 							else
 							{
-								newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.TimeProcessed.Year.ToString() + "\\" + file.FileCreationDate.Month + "\\" + file.Filename;
+								newFileLocation = Path.Combine(folderPath, "PictureOrganizer", "Years", file.FileCreationDate.Year.ToString(), file.FileCreationDate.Month.ToString(), file.Filename);
+
 							}
 							file.NewFileLocation = newFileLocation;
 							worker.ReportProgress(index);
+							
 							File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
+							
 							//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
 							index++;
 							progressBarIndex = index;
