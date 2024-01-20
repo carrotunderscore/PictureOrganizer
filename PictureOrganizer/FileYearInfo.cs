@@ -8,25 +8,26 @@ namespace PictureOrganizer
 {
 	public class FileYearInfo
 	{
-		public int Year { get; set; }
-
-		public string YearMonth { get; set; }
 		public string FullFilename { get; set; }
-
 		public string Filename { get; set; }
 
-		public FileYearInfo(int year, string fullFilename, string filename)
+		public string NewFileLocation { get; set; }
+
+		public string OldFileLocation { get; set; }
+
+		public DateTime TimeProcessed { get; set; }
+
+		public DateTime FileCreationDate { get; set; }
+
+		public FileYearInfo(string fileName, string fullFilename, string newFileLocation, string oldFileLocation, DateTime timeProcessed,
+			DateTime fileCreationDate)
 		{
-			Year = year;
+			Filename = fileName;
 			FullFilename = fullFilename;
-			Filename = filename;
-		}
-		public FileYearInfo(int year, string yearMonth, string fullFilename, string filename)
-		{
-			Year = year;
-			FullFilename = fullFilename;
-			Filename = filename;
-			YearMonth = yearMonth;
+			NewFileLocation = newFileLocation;
+			OldFileLocation = oldFileLocation;
+			TimeProcessed = timeProcessed;
+			FileCreationDate = fileCreationDate;
 		}
 	}
 }

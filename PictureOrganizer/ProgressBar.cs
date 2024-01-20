@@ -15,7 +15,6 @@ namespace PictureOrganizer
 {
 	public partial class ProgressBar : Form
 	{
-		private int totalFiles;
 		private static Stopwatch stopwatch = new Stopwatch();
 		private List<FileYearInfo> fileYearList;
 		private string folderPath;
@@ -25,9 +24,8 @@ namespace PictureOrganizer
 		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth)
 		{
 			InitializeComponent();
-			this.totalFiles=fileYearList.Count(); ;
 			this.fileProcessingProgressBar.Minimum = 0;
-			this.fileProcessingProgressBar.Maximum = totalFiles;
+			this.fileProcessingProgressBar.Maximum = fileYearList.Count() * 1000;
 			this.fileYearList = fileYearList;
 			this.folderPath = folderPath;
 			this.sortByMonth = sortByMonth;
@@ -38,20 +36,16 @@ namespace PictureOrganizer
 			backgroundWorker1.WorkerReportsProgress = true;
 			backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
 
-
 			// Start the background worker
 			backgroundWorker1.RunWorkerAsync();
 		}
 			
 		public async Task updateProgressBar(int progressValue)
 		{
-			
-
 		}
 
 		private void fileProcessingProgressBar_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -67,13 +61,13 @@ namespace PictureOrganizer
 						var newFileLocation = "";
 						if (!sortByMonth)
 						{
-							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + file.Filename;
+							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.FileCreationDate.Year.ToString() + "\\" + file.Filename;
 						}
 						else
 						{
-							string month = file.YearMonth.Split("-")[1];
-							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.Year.ToString() + "\\" + month + "\\" + file.Filename;
+							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.TimeProcessed.Year.ToString() + "\\" + file.FileCreationDate.Month + "\\" + file.Filename;
 						}
+						file.NewFileLocation = newFileLocation;
 						worker.ReportProgress(index);
 						File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
 						//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
@@ -85,8 +79,7 @@ namespace PictureOrganizer
 		}
 		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			fileProcessingProgressBar.Value = e.ProgressPercentage;
-			
+			fileProcessingProgressBar.Value = e.ProgressPercentage;			
 		}
 		private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{

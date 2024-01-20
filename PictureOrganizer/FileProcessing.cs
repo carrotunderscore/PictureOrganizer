@@ -70,29 +70,31 @@ namespace PictureOrganizer
 			{
 				Directory.CreateDirectory(folderPath + "\\PictureOrganizer" + "\\Years");
 			}
-			var uniqueYears = fileYearList.Select(info => info.Year).Distinct().ToList();
-			var uniqueMonths = fileYearList.Select(info => info.YearMonth).Distinct().ToList();
+
+			var uniqueYearMonths = fileYearList
+			.Select(info => new { Year = info.FileCreationDate.Year, Month = info.FileCreationDate.Month })
+			.Distinct()
+			.ToList();
 
 			if (!sortByMonth)
 			{
-				foreach (int years in uniqueYears)
+
+				foreach (var yearMonth in uniqueYearMonths)
 				{
-					string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + years.ToString();
+					string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + yearMonth.Year.ToString();
 					DirectoryInfo yearDirectory = new DirectoryInfo(individualYearString);
 					if (!yearDirectory.Exists)
 					{
 						Directory.CreateDirectory(individualYearString);
 					}
+					//AddNewFileLocation(ref fileYearList);
 				}
 			}
 			else
 			{
-				foreach (string years in uniqueMonths)
+				foreach (var yearMonth in uniqueYearMonths)
 				{
-					string[] yearsAndMonthsSplit = years.Split('-');
-					string year = yearsAndMonthsSplit[0];
-					string month = yearsAndMonthsSplit[1];
-					string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + year + "\\" + month;
+					string individualYearString = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + yearMonth.Year + "\\" + yearMonth.Month;
 					DirectoryInfo yearDirectory = new DirectoryInfo(individualYearString);
 					if (!yearDirectory.Exists)
 					{
@@ -123,22 +125,30 @@ namespace PictureOrganizer
 
 				allFilesSizeMB.Add(fileSizeInMb);
 
-				if (sortByMonth)
-				{
-					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.CreationTime.Year.ToString() + "-" + GetMonthName(fileInfo.CreationTime.Month), fileInfo.FullName, fileInfo.Name));
-				}
-				else
-				{
-					fileYearList.Add(new FileYearInfo(fileInfo.CreationTime.Year, fileInfo.FullName, fileInfo.Name));
-				}
-				uniqueYears.Add(fileInfo.CreationTime.Year);
+				DateTime currentTime = DateTime.Now;
+				string oldFileLocation = fileInfo.FullName.ToString();
+
+				fileYearList.Add(
+						new FileYearInfo(
+							fileInfo.Name,
+							fileInfo.FullName,
+							null, //newFileLocation, 
+							oldFileLocation,
+							currentTime,
+							fileInfo.CreationTime
+							));
+
 			}
 			double sumMB = allFilesSizeMB.Sum();
 			double sumGB = sumMB / 1024.0;
 			double roundedValueMB = Math.Round(sumMB, 2);
 			double roundedValueGB = Math.Round(sumGB, 2);
 
-			DialogResult result = MessageBox.Show("The files of all these files are " + roundedValueMB.ToString() + " MB\n or " + roundedValueGB.ToString() + " GB\nPress OK to continue sorting, press cancel to cancel", "Title", MessageBoxButtons.OKCancel);
+			DialogResult result = MessageBox.Show("" +
+				"Number of files: " + fileYearList.Count() + "\n" +
+				"Size in MB: " + roundedValueMB.ToString() + " MB\n" +
+				"Size in GB: " + roundedValueGB.ToString() + " GB\n" +
+				"Press OK to continue sorting, press cancel to cancel", "Title", MessageBoxButtons.OKCancel);
 			
 			if (result == DialogResult.OK)
 				return true;
@@ -146,6 +156,16 @@ namespace PictureOrganizer
 				return false;
 		}
 
+		public string AddNewFileLocation(ref List<FileYearInfo> fileYearList)
+		{
+			foreach (FileYearInfo fileInfo in fileYearList)
+			{
+
+				fileInfo.NewFileLocation = fileInfo.Filename;
+			}
+
+			return "";
+		}
 		static void EnumerateFolders(string folderPath, List<string> allFiles)
 		{
 			string[] allowedExtensions = getAllowedFileExtensions(FileTypeCheckboxes);

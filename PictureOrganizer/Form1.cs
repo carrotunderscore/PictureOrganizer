@@ -40,7 +40,7 @@ Renaming files
 -----------------------------------------------------------------------------------------------------
 	
 TODO:::::::::::
-FileYearInfo object needs refactoring. Add new and old file location. Having a timestamp for the files if probably better that one year variable and one year month variable
+FileYearInfo object needs refactoring. Add new and old file location. Having a timestamp for the files is probably better that one year variable and one year month variable
 TODO:::::::::::
 
 DESIGN CHANGES
