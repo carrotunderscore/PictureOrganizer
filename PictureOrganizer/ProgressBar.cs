@@ -54,35 +54,43 @@ namespace PictureOrganizer
 		{
 			BackgroundWorker worker = sender as BackgroundWorker;
 			int index = 0;
-			foreach (FileYearInfo file in fileYearList)
+			try
 			{
-				if (File.Exists(file.FullFilename))
+				foreach (FileYearInfo file in fileYearList)
 				{
-					using (FileStream fs = File.Open(file.FullFilename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+					if (File.Exists(file.FullFilename))
 					{
-						var newFileLocation = "";
-						if (!sortByMonth)
+						using (FileStream fs = File.Open(file.FullFilename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
 						{
-							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.FileCreationDate.Year.ToString() + "\\" + file.Filename;
+							var newFileLocation = "";
+							if (!sortByMonth)
+							{
+								newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.FileCreationDate.Year.ToString() + "\\" + file.Filename;
+							}
+							else
+							{
+								newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.TimeProcessed.Year.ToString() + "\\" + file.FileCreationDate.Month + "\\" + file.Filename;
+							}
+							file.NewFileLocation = newFileLocation;
+							worker.ReportProgress(index);
+							File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
+							//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
+							index++;
+							progressBarIndex = index;
 						}
-						else
-						{
-							newFileLocation = folderPath + "\\PictureOrganizer" + "\\Years" + "\\" + file.TimeProcessed.Year.ToString() + "\\" + file.FileCreationDate.Month + "\\" + file.Filename;
-						}
-						file.NewFileLocation = newFileLocation;
-						worker.ReportProgress(index);
-						File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
-						//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
-						index++;
-						progressBarIndex = index;
 					}
 				}
+				if (!logWritten)
+				{
+					Logging.WriteToLogFile(fileYearList);
+					logWritten = true;
+				}
 			}
-			if (!logWritten)
+			catch (Exception ex)
 			{
-				Logging.WriteToLogFile(fileYearList);
-				logWritten = true;
+
 			}
+			
 		}
 		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
