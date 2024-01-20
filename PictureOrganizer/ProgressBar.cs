@@ -20,6 +20,8 @@ namespace PictureOrganizer
 		private string folderPath;
 		private bool sortByMonth;
 		private int progressBarIndex = 0;
+		private bool logWritten = false;
+
 
 		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth)
 		{
@@ -75,6 +77,11 @@ namespace PictureOrganizer
 						progressBarIndex = index;
 					}
 				}
+			}
+			if (!logWritten)
+			{
+				Logging.WriteToLogFile(fileYearList);
+				logWritten = true;
 			}
 		}
 		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)

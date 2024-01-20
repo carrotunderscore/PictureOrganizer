@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "AhPFpfDHMG6NvO6h1F+JXVuSNRCcNJ2RnMabOxqAB6E0uEJka+iMALOhpEd03FOA32w6Z5o5Ri22FryBmOJzIg==",
+  "dgSpecHash": "0vZDuIphU7R+vgI2M1MS0qnBDjEZHRhtzp07B9kirHOxAM8fhXdcO8ZX0ZuonML7USnGBkJnb4G2iVA9IY4zgQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\rober\\source\\repos\\PictureOrganizer\\PictureOrganizer\\PictureOrganizer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\rober\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
