@@ -20,3 +20,4 @@ C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-w
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.csproj.AssemblyReference.cache
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
 C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.csproj.CopyComplete
+C:\Users\rober\source\repos\PictureOrganizer\PictureOrganizer\obj\Debug\net6.0-windows\PictureOrganizer.FileHistoryManager.resources

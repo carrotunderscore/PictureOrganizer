@@ -19,28 +19,20 @@ using static PictureOrganizer.Helper;
 Copy / move flag -small
 
 Open gui and select which folders to configure -big
-Save old file location -big
+
+
 _____________________________________________________________________________________________________
 																									|
-file history. Save files previous history so that you can move them and then reverse it if you want. big--------------------------------------------------
-	0. Determine data to be saved
-		string[] FileOldLocation, string[] FileNewLocation, bool OperationType, DateTime ProcessedTime
-	1. Create json log file  
-		Save log file in appdata folder
-
-check if logfile exists (in appdata)
-create if not (in appdata)
-do this when starting the program
-
-Write to log file when:
-copying files
-Moving file (not yet developed)
-Renaming files
+create reverse process functionality - big
+	Create form with a list of processes that has run
+	Click on each to reverse
+	If files been copied then delete the copied files
+	if they've been moved then move them back
 																									|
 -----------------------------------------------------------------------------------------------------
 	
 TODO:::::::::::
-FileYearInfo object needs refactoring. Add new and old file location. Having a timestamp for the files is probably better that one year variable and one year month variable
+
 TODO:::::::::::
 
 DESIGN CHANGES
@@ -56,6 +48,8 @@ Add progressbar -medium - DONE -was small
 Organize code - medium - was medium
 add window telling you how much space the file take up when copying - small - was small
 loop pictures in subfolders flag -small
+file history. Save files previous history so that you can move them and then reverse it if you want.-big -was big
+
  */
 
 namespace PictureOrganizer
@@ -352,11 +346,18 @@ namespace PictureOrganizer
 			catch (System.OutOfMemoryException ex)
 			{
 				pictureBox1.Refresh();
-
+				MessageBox.Show(ex.Message);
 			}
 		}
 
+		private void fileHistoryManagerButton_Click(object sender, EventArgs e)
+		{
+			// Create an instance of SecondForm
+			FileHistoryManager fileHistoryManager = new FileHistoryManager();
 
+			// Show the SecondForm
+			fileHistoryManager.Show();
+		}
 	}
 
 

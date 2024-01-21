@@ -50,6 +50,7 @@
 			outputFolderDialog=new FolderBrowserDialog();
 			pictureBox1=new PictureBox();
 			tableLayoutPanel1=new TableLayoutPanel();
+			fileHistoryManagerButton=new Button();
 			flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			tableLayoutPanel1.SuspendLayout();
@@ -92,6 +93,7 @@
 			flowLayoutPanel1.Controls.Add(sortMonth);
 			flowLayoutPanel1.Controls.Add(fileSelection);
 			flowLayoutPanel1.Controls.Add(loopSubFoldersCheckbox);
+			flowLayoutPanel1.Controls.Add(fileHistoryManagerButton);
 			flowLayoutPanel1.Dock=DockStyle.Bottom;
 			flowLayoutPanel1.Location=new Point(0, 830);
 			flowLayoutPanel1.Name="flowLayoutPanel1";
@@ -240,6 +242,7 @@
 			// loopSubFoldersCheckbox
 			// 
 			loopSubFoldersCheckbox.AutoSize=true;
+			flowLayoutPanel1.SetFlowBreak(loopSubFoldersCheckbox, true);
 			loopSubFoldersCheckbox.Location=new Point(3, 203);
 			loopSubFoldersCheckbox.Name="loopSubFoldersCheckbox";
 			loopSubFoldersCheckbox.Size=new Size(219, 29);
@@ -274,6 +277,18 @@
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 			tableLayoutPanel1.Size=new Size(1763, 830);
 			tableLayoutPanel1.TabIndex=0;
+			// 
+			// fileHistoryManagerButton
+			// 
+			flowLayoutPanel1.SetFlowBreak(fileHistoryManagerButton, true);
+			fileHistoryManagerButton.Location=new Point(3, 243);
+			fileHistoryManagerButton.Name="fileHistoryManagerButton";
+			fileHistoryManagerButton.Size=new Size(143, 34);
+			fileHistoryManagerButton.TabIndex=18;
+			fileHistoryManagerButton.TabStop=false;
+			fileHistoryManagerButton.Text="File history";
+			fileHistoryManagerButton.UseVisualStyleBackColor=true;
+			fileHistoryManagerButton.Click+=fileHistoryManagerButton_Click;
 			// 
 			// Form1
 			// 
@@ -315,5 +330,6 @@
 		private Button sortMonth;
 		private Button fileSelection;
 		private CheckBox loopSubFoldersCheckbox;
+		private Button fileHistoryManagerButton;
 	}
 }

@@ -131,7 +131,6 @@ namespace PictureOrganizer
 				fileYearList.Add(
 						new FileYearInfo(
 							fileInfo.Name,
-							fileInfo.FullName,
 							null, //newFileLocation, 
 							oldFileLocation,
 							currentTime,
@@ -179,10 +178,12 @@ namespace PictureOrganizer
 			catch (UnauthorizedAccessException ex)
 			{
 				Console.WriteLine($"Access denied: {ex.Message}");
+				MessageBox.Show(ex.Message);
+
 			}
 
 
-			if(LoopSubFolders)
+			if (LoopSubFolders)
 			{
 				try
 				{
@@ -211,6 +212,7 @@ namespace PictureOrganizer
 				catch (UnauthorizedAccessException ex)
 				{
 					Console.WriteLine($"Access denied: {ex.Message}");
+					MessageBox.Show(ex.Message);
 				}
 			}
 			

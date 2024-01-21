@@ -8,7 +8,6 @@ namespace PictureOrganizer
 {
 	public class FileYearInfo
 	{
-		public string FullFilename { get; set; }
 		public string Filename { get; set; }
 
 		public string NewFileLocation { get; set; }
@@ -19,11 +18,10 @@ namespace PictureOrganizer
 
 		public DateTime FileCreationDate { get; set; }
 
-		public FileYearInfo(string fileName, string fullFilename, string newFileLocation, string oldFileLocation, DateTime timeProcessed,
+		public FileYearInfo(string fileName, string newFileLocation, string oldFileLocation, DateTime timeProcessed,
 			DateTime fileCreationDate)
 		{
 			Filename = fileName;
-			FullFilename = fullFilename;
 			NewFileLocation = newFileLocation;
 			OldFileLocation = oldFileLocation;
 			TimeProcessed = timeProcessed;

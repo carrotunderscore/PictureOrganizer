@@ -58,9 +58,9 @@ namespace PictureOrganizer
 			{
 				foreach (FileYearInfo file in fileYearList)
 				{
-					if (File.Exists(file.FullFilename))
+					if (File.Exists(file.OldFileLocation))
 					{
-						using (FileStream fs = File.Open(file.FullFilename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+						using (FileStream fs = File.Open(file.OldFileLocation, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
 						{
 							var newFileLocation = "";
 							if (!sortByMonth)
@@ -75,7 +75,7 @@ namespace PictureOrganizer
 							file.NewFileLocation = newFileLocation;
 							worker.ReportProgress(index);
 							
-							File.Copy(file.FullFilename, Path.Combine(folderPath, newFileLocation), true);
+							File.Copy(file.OldFileLocation, Path.Combine(folderPath, newFileLocation), true);
 							
 							//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
 							index++;
@@ -91,7 +91,7 @@ namespace PictureOrganizer
 			}
 			catch (Exception ex)
 			{
-
+				MessageBox.Show(ex.Message);
 			}
 			
 		}
