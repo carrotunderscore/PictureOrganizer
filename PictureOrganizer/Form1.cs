@@ -17,15 +17,15 @@ using static PictureOrganizer.Helper;
 2. zoom in and out of the picture with the up and down arrows -small
 
 Copy / move flag -small
-
+Move operation - small
 Open gui and select which folders to configure -big
 
 
 _____________________________________________________________________________________________________
 																									|
 create reverse process functionality - big
-	Create form with a list of processes that has run
-	Click on each to reverse
+	Create form with a list of processes that has run -DONE
+	Click on each to reverse -must move first-
 	If files been copied then delete the copied files
 	if they've been moved then move them back
 																									|
@@ -63,6 +63,7 @@ namespace PictureOrganizer
 		private static Dictionary<string, bool> fileTypeCheckboxes;
 		private FileProcessing fileProcessing;
 		private bool loopSubFolders = false;
+		private bool moveFiles = false;
 
 		public Form1()
 		{
@@ -296,12 +297,12 @@ namespace PictureOrganizer
 		}
 		private void sortYear_Click(object sender, EventArgs e)
 		{
-			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders);
+			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders, moveFiles);
 			fileProcessing.sortFiles(false);
 		}
 		private void sortMonth_Click(object sender, EventArgs e)
 		{
-			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders);
+			FileProcessing fileProcessing = new FileProcessing(selectedInputFolder, selectedOutputFolder, fileTypeCheckboxes, loopSubFolders, moveFiles);
 			fileProcessing.sortFiles(true);
 		}
 		private void fileSelection_Click(object sender, EventArgs e)
@@ -319,7 +320,7 @@ namespace PictureOrganizer
 		}
 		private void loopSubFolders_CheckedChanged(object sender, EventArgs e)
 		{
-			if (loopSubFoldersCheckbox.Checked == true)
+			if (loopSubfoldersCheckbox.Checked == true)
 			{
 				loopSubFolders = true;
 			}
@@ -357,6 +358,23 @@ namespace PictureOrganizer
 
 			// Show the SecondForm
 			fileHistoryManager.Show();
+		}
+
+		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void moveFilesCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (moveFilesCheckbox.Checked == true)
+			{
+				moveFiles = true;
+			}
+			else
+			{
+				moveFiles = false;
+			}
 		}
 	}
 

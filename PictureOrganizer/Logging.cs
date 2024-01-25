@@ -35,24 +35,35 @@ namespace PictureOrganizer
 
 		public static void WriteToLogFile(List<FileYearInfo> fileYearInfo)
 		{
-			string pictureOrganizerFolder = "PictureOrganizer";
-			string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			string logFilePath = Path.Combine(appDataFolder, pictureOrganizerFolder, "changeLog.json");
-
-			JArray existingData = new JArray();
-			if (File.Exists(logFilePath))
+			try
 			{
-				string existingJson = File.ReadAllText(logFilePath);
-				existingData = JArray.Parse(existingJson);
+				string pictureOrganizerFolder = "PictureOrganizer";
+				string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				string logFilePath = Path.Combine(appDataFolder, pictureOrganizerFolder, "changeLog.json");
+
+				JArray existingData = new JArray();
+				if (File.Exists(logFilePath))
+				{
+					string existingJson = File.ReadAllText(logFilePath);
+					if (String.IsNullOrEmpty(existingJson))
+					{
+						File.WriteAllText(logFilePath, "[]");
+					}
+					existingData = JArray.Parse(existingJson);
+				}
+
+				JObject newEntry = new JObject(
+					new JProperty("Timestamp", DateTime.Now),
+					new JProperty("Changes", JArray.FromObject(fileYearInfo))
+				);
+
+				existingData.Add(newEntry);
+				File.WriteAllText(logFilePath, existingData.ToString(Newtonsoft.Json.Formatting.Indented));
 			}
-
-			JObject newEntry = new JObject(
-				new JProperty("Timestamp", DateTime.Now),
-				new JProperty("Changes", JArray.FromObject(fileYearInfo))
-			);
-
-			existingData.Add(newEntry);
-			File.WriteAllText(logFilePath, existingData.ToString(Newtonsoft.Json.Formatting.Indented));
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+			
 		}
 		public class ChangeLogEntry
 		{

@@ -43,14 +43,15 @@
 			outputFolderLabel=new Label();
 			sortYear=new Button();
 			sortMonth=new Button();
+			loopSubfoldersCheckbox=new CheckBox();
+			moveFilesCheckbox=new CheckBox();
+			fileHistoryManagerButton=new Button();
 			fileSelection=new Button();
-			loopSubFoldersCheckbox=new CheckBox();
 			folderBrowserDialog1=new FolderBrowserDialog();
 			inputFolderDialog=new FolderBrowserDialog();
 			outputFolderDialog=new FolderBrowserDialog();
 			pictureBox1=new PictureBox();
 			tableLayoutPanel1=new TableLayoutPanel();
-			fileHistoryManagerButton=new Button();
 			flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
 			tableLayoutPanel1.SuspendLayout();
@@ -91,9 +92,10 @@
 			flowLayoutPanel1.Controls.Add(outputFolderLabel);
 			flowLayoutPanel1.Controls.Add(sortYear);
 			flowLayoutPanel1.Controls.Add(sortMonth);
-			flowLayoutPanel1.Controls.Add(fileSelection);
-			flowLayoutPanel1.Controls.Add(loopSubFoldersCheckbox);
+			flowLayoutPanel1.Controls.Add(loopSubfoldersCheckbox);
+			flowLayoutPanel1.Controls.Add(moveFilesCheckbox);
 			flowLayoutPanel1.Controls.Add(fileHistoryManagerButton);
+			flowLayoutPanel1.Controls.Add(fileSelection);
 			flowLayoutPanel1.Dock=DockStyle.Bottom;
 			flowLayoutPanel1.Location=new Point(0, 830);
 			flowLayoutPanel1.Name="flowLayoutPanel1";
@@ -227,10 +229,45 @@
 			sortMonth.UseVisualStyleBackColor=true;
 			sortMonth.Click+=sortMonth_Click;
 			// 
+			// loopSubfoldersCheckbox
+			// 
+			loopSubfoldersCheckbox.AutoSize=true;
+			loopSubfoldersCheckbox.Location=new Point(3, 163);
+			loopSubfoldersCheckbox.Name="loopSubfoldersCheckbox";
+			loopSubfoldersCheckbox.Size=new Size(219, 29);
+			loopSubfoldersCheckbox.TabIndex=17;
+			loopSubfoldersCheckbox.Text="Go through subfolders";
+			loopSubfoldersCheckbox.UseVisualStyleBackColor=true;
+			loopSubfoldersCheckbox.CheckedChanged+=loopSubFolders_CheckedChanged;
+			// 
+			// moveFilesCheckbox
+			// 
+			moveFilesCheckbox.AutoSize=true;
+			flowLayoutPanel1.SetFlowBreak(moveFilesCheckbox, true);
+			moveFilesCheckbox.Location=new Point(228, 163);
+			moveFilesCheckbox.Name="moveFilesCheckbox";
+			moveFilesCheckbox.Size=new Size(272, 29);
+			moveFilesCheckbox.TabIndex=19;
+			moveFilesCheckbox.Text="Move files instead of copying";
+			moveFilesCheckbox.UseVisualStyleBackColor=true;
+			moveFilesCheckbox.CheckedChanged+=moveFilesCheckbox_CheckedChanged;
+			// 
+			// fileHistoryManagerButton
+			// 
+			flowLayoutPanel1.SetFlowBreak(fileHistoryManagerButton, true);
+			fileHistoryManagerButton.Location=new Point(3, 198);
+			fileHistoryManagerButton.Name="fileHistoryManagerButton";
+			fileHistoryManagerButton.Size=new Size(143, 34);
+			fileHistoryManagerButton.TabIndex=18;
+			fileHistoryManagerButton.TabStop=false;
+			fileHistoryManagerButton.Text="File history";
+			fileHistoryManagerButton.UseVisualStyleBackColor=true;
+			fileHistoryManagerButton.Click+=fileHistoryManagerButton_Click;
+			// 
 			// fileSelection
 			// 
 			flowLayoutPanel1.SetFlowBreak(fileSelection, true);
-			fileSelection.Location=new Point(3, 163);
+			fileSelection.Location=new Point(3, 238);
 			fileSelection.Name="fileSelection";
 			fileSelection.Size=new Size(143, 34);
 			fileSelection.TabIndex=16;
@@ -238,18 +275,6 @@
 			fileSelection.Text="File types";
 			fileSelection.UseVisualStyleBackColor=true;
 			fileSelection.Click+=fileSelection_Click;
-			// 
-			// loopSubFoldersCheckbox
-			// 
-			loopSubFoldersCheckbox.AutoSize=true;
-			flowLayoutPanel1.SetFlowBreak(loopSubFoldersCheckbox, true);
-			loopSubFoldersCheckbox.Location=new Point(3, 203);
-			loopSubFoldersCheckbox.Name="loopSubFoldersCheckbox";
-			loopSubFoldersCheckbox.Size=new Size(219, 29);
-			loopSubFoldersCheckbox.TabIndex=17;
-			loopSubFoldersCheckbox.Text="Go through subfolders";
-			loopSubFoldersCheckbox.UseVisualStyleBackColor=true;
-			loopSubFoldersCheckbox.CheckedChanged+=loopSubFolders_CheckedChanged;
 			// 
 			// pictureBox1
 			// 
@@ -277,18 +302,6 @@
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 			tableLayoutPanel1.Size=new Size(1763, 830);
 			tableLayoutPanel1.TabIndex=0;
-			// 
-			// fileHistoryManagerButton
-			// 
-			flowLayoutPanel1.SetFlowBreak(fileHistoryManagerButton, true);
-			fileHistoryManagerButton.Location=new Point(3, 243);
-			fileHistoryManagerButton.Name="fileHistoryManagerButton";
-			fileHistoryManagerButton.Size=new Size(143, 34);
-			fileHistoryManagerButton.TabIndex=18;
-			fileHistoryManagerButton.TabStop=false;
-			fileHistoryManagerButton.Text="File history";
-			fileHistoryManagerButton.UseVisualStyleBackColor=true;
-			fileHistoryManagerButton.Click+=fileHistoryManagerButton_Click;
 			// 
 			// Form1
 			// 
@@ -329,7 +342,8 @@
 		private Label label3;
 		private Button sortMonth;
 		private Button fileSelection;
-		private CheckBox loopSubFoldersCheckbox;
+		private CheckBox loopSubfoldersCheckbox;
 		private Button fileHistoryManagerButton;
+		private CheckBox moveFilesCheckbox;
 	}
 }

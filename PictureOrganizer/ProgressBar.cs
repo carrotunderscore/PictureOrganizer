@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.IO;
+using System.IO.Pipes;
 
 namespace PictureOrganizer
 {
@@ -19,11 +21,12 @@ namespace PictureOrganizer
 		private List<FileYearInfo> fileYearList;
 		private string folderPath;
 		private bool sortByMonth;
+		private bool moveFiles;
 		private int progressBarIndex = 0;
 		private bool logWritten = false;
 
 
-		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth)
+		public ProgressBar(List<FileYearInfo> fileYearList, string folderPath, bool sortByMonth, bool moveFiles)
 		{
 			InitializeComponent();
 			this.fileProcessingProgressBar.Minimum = 0;
@@ -31,15 +34,18 @@ namespace PictureOrganizer
 			this.fileYearList = fileYearList;
 			this.folderPath = folderPath;
 			this.sortByMonth = sortByMonth;
+			this.moveFiles = moveFiles;
 			stopwatch.Start();
-
 			backgroundWorker1.DoWork += backgroundWorker1_DoWork;
 			backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
-			backgroundWorker1.WorkerReportsProgress = true;
 			backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
+			backgroundWorker1.WorkerReportsProgress = true;
+			backgroundWorker1.WorkerSupportsCancellation = true;
 
 			// Start the background worker
 			backgroundWorker1.RunWorkerAsync();
+
+
 		}
 			
 		public async Task updateProgressBar(int progressValue)
@@ -74,10 +80,18 @@ namespace PictureOrganizer
 							}
 							file.NewFileLocation = newFileLocation;
 							worker.ReportProgress(index);
-							
-							File.Copy(file.OldFileLocation, Path.Combine(folderPath, newFileLocation), true);
-							
-							//File.Move(sourcePath, Path.Combine(destinationPath, Path.GetFileName(sourcePath)));
+
+							if (moveFiles)
+							{
+								fs.Close();
+								File.Move(file.OldFileLocation, newFileLocation);
+
+							}
+							else
+							{
+								File.Copy(file.OldFileLocation, Path.Combine(folderPath, newFileLocation), true);
+							}
+
 							index++;
 							progressBarIndex = index;
 						}

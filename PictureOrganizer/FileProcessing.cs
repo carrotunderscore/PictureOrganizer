@@ -15,15 +15,16 @@ namespace PictureOrganizer
 		private string selectedInputFolder;
 		private string selectedOutputFolder;
 		private static bool LoopSubFolders;
+		private static bool MoveFiles;
 		private static Dictionary<string, bool> FileTypeCheckboxes;
 
-		public FileProcessing(string selectedInputFolder, string selectedOutputFolder, Dictionary<string, bool> fileTypeCheckboxes, bool loopSubFolders)
+		public FileProcessing(string selectedInputFolder, string selectedOutputFolder, Dictionary<string, bool> fileTypeCheckboxes, bool loopSubFolders, bool moveFiles)
 		{
 			this.selectedInputFolder=selectedInputFolder;
 			this.selectedOutputFolder=selectedOutputFolder;
 			FileTypeCheckboxes = fileTypeCheckboxes;
 			LoopSubFolders = loopSubFolders;
-
+			MoveFiles = moveFiles;
 		}
 
 		public void sortFiles(bool sortByMonth)
@@ -45,7 +46,7 @@ namespace PictureOrganizer
 						if (sortFiles)
 						{
 							CreateDirectories(folderPath, fileYearList, sortByMonth);
-							ProgressBar progressBar = new ProgressBar(fileYearList, folderPath, sortByMonth);
+							ProgressBar progressBar = new ProgressBar(fileYearList, folderPath, sortByMonth, MoveFiles);
 							progressBar.Show();
 						}	
 					}
@@ -87,7 +88,6 @@ namespace PictureOrganizer
 					{
 						Directory.CreateDirectory(individualYearString);
 					}
-					//AddNewFileLocation(ref fileYearList);
 				}
 			}
 			else
